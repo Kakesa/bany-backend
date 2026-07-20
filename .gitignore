@@ -4,5 +4,4 @@ uploads/*
 !uploads/.gitkeep
 data/
 .env
-.env.example
 *.log
