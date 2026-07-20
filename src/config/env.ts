@@ -7,4 +7,5 @@ export const env = {
   adminEmail: process.env.ADMIN_EMAIL || 'admin@banytalks.com',
   adminPassword: process.env.ADMIN_PASSWORD || 'BanyAdmin2026!',
   frontendUrl: process.env.FRONTEND_URL || 'http://localhost:3000',
+  adminUrl: process.env.ADMIN_URL || 'http://localhost:3001',
 };
