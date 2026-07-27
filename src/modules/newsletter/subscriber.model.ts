@@ -3,11 +3,16 @@ import mongoose, { Schema, type InferSchemaType, type Model } from 'mongoose';
 const subscriberSchema = new Schema(
   {
     email: { type: String, required: true, unique: true, lowercase: true, trim: true },
-    source: { type: String, default: 'blog' },
+    firstName: { type: String, trim: true, default: '' },
+    lastName: { type: String, trim: true, default: '' },
+    source: { type: String, default: 'blog', index: true },
+    tags: { type: [String], default: [], index: true },
     subscribedAt: { type: Date, default: Date.now },
+    consentAt: { type: Date, default: Date.now },
     active: { type: Boolean, default: true, index: true },
     unsubscribeToken: { type: String, unique: true, sparse: true, index: true },
     lastNotifiedAt: { type: Date, default: null },
+    welcomeSentAt: { type: Date, default: null },
   },
   {
     timestamps: true,

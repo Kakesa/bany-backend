@@ -8,10 +8,38 @@ function getErrorStatus(err: unknown): number {
   return 500;
 }
 
+async function handle(res: Response, fn: () => Promise<unknown>, successStatus = 200) {
+  try {
+    const data = await fn();
+    res.status(successStatus).json(data);
+  } catch (err) {
+    res.status(getErrorStatus(err)).json({
+      message: err instanceof Error ? err.message : 'Erreur',
+    });
+  }
+}
+
 export class NewsletterController {
-  async subscribe(req: Request, res: Response) {
+  subscribe(req: Request, res: Response) {
+    return handle(
+      res,
+      () =>
+        newsletterService.subscribe(req.body?.email, req.body?.source || 'blog', {
+          firstName: req.body?.firstName,
+          lastName: req.body?.lastName,
+          tags: req.body?.tags,
+        }),
+      201
+    ).then(() => undefined);
+  }
+
+  async subscribeWithStatus(req: Request, res: Response) {
     try {
-      const result = await newsletterService.subscribe(req.body?.email, req.body?.source || 'blog');
+      const result = await newsletterService.subscribe(req.body?.email, req.body?.source || 'blog', {
+        firstName: req.body?.firstName,
+        lastName: req.body?.lastName,
+        tags: req.body?.tags,
+      });
       res.status(result.created ? 201 : 200).json({
         success: result.success,
         message: result.message,
@@ -23,58 +51,85 @@ export class NewsletterController {
     }
   }
 
-  async unsubscribe(req: Request, res: Response) {
-    try {
-      const token = (req.query.token as string) || req.body?.token;
-      const result = await newsletterService.unsubscribeByToken(token);
-      res.json(result);
-    } catch (err) {
-      res.status(getErrorStatus(err)).json({
-        message: err instanceof Error ? err.message : 'Erreur',
-      });
-    }
+  unsubscribe(req: Request, res: Response) {
+    const token = (req.query.token as string) || req.body?.token;
+    return handle(res, () => newsletterService.unsubscribeByToken(token));
   }
 
-  async list(req: Request, res: Response) {
-    const data = await newsletterService.listSubscribers();
-    res.json(data);
+  list(req: Request, res: Response) {
+    return handle(res, () =>
+      newsletterService.listSubscribers({
+        q: req.query.q as string,
+        source: req.query.source as string,
+        tag: req.query.tag as string,
+        active: req.query.active as string,
+      })
+    );
   }
 
-  async setActive(req: Request, res: Response) {
-    try {
-      const active = Boolean(req.body?.active);
-      const data = await newsletterService.setActive(req.params.id, active);
-      res.json(data);
-    } catch (err) {
-      res.status(getErrorStatus(err)).json({
-        message: err instanceof Error ? err.message : 'Erreur',
-      });
-    }
+  setActive(req: Request, res: Response) {
+    return handle(res, () => newsletterService.setActive(req.params.id, Boolean(req.body?.active)));
   }
 
-  async remove(req: Request, res: Response) {
-    try {
-      const data = await newsletterService.deleteSubscriber(req.params.id);
-      res.json(data);
-    } catch (err) {
-      res.status(getErrorStatus(err)).json({
-        message: err instanceof Error ? err.message : 'Erreur',
-      });
-    }
+  updateSubscriber(req: Request, res: Response) {
+    return handle(res, () => newsletterService.updateSubscriber(req.params.id, req.body || {}));
   }
 
-  async sendCampaign(req: Request, res: Response) {
-    try {
-      const data = await newsletterService.sendCampaign({
+  remove(req: Request, res: Response) {
+    return handle(res, () => newsletterService.deleteSubscriber(req.params.id));
+  }
+
+  sendCampaign(req: Request, res: Response) {
+    return handle(res, () =>
+      newsletterService.sendCampaign({
         subject: req.body?.subject,
         message: req.body?.message,
-      });
-      res.json(data);
-    } catch (err) {
-      res.status(getErrorStatus(err)).json({
-        message: err instanceof Error ? err.message : 'Erreur',
-      });
-    }
+      })
+    );
+  }
+
+  overview(req: Request, res: Response) {
+    return handle(res, () => newsletterService.overview());
+  }
+
+  listTemplates(req: Request, res: Response) {
+    return handle(res, () => newsletterService.listTemplates());
+  }
+
+  createTemplate(req: Request, res: Response) {
+    return handle(res, () => newsletterService.createTemplate(req.body || {}), 201);
+  }
+
+  updateTemplate(req: Request, res: Response) {
+    return handle(res, () => newsletterService.updateTemplate(req.params.id, req.body || {}));
+  }
+
+  deleteTemplate(req: Request, res: Response) {
+    return handle(res, () => newsletterService.deleteTemplate(req.params.id));
+  }
+
+  listCampaigns(req: Request, res: Response) {
+    return handle(res, () => newsletterService.listCampaigns());
+  }
+
+  getCampaign(req: Request, res: Response) {
+    return handle(res, () => newsletterService.getCampaign(req.params.id));
+  }
+
+  createCampaign(req: Request, res: Response) {
+    return handle(res, () => newsletterService.createCampaign(req.body || {}), 201);
+  }
+
+  updateCampaign(req: Request, res: Response) {
+    return handle(res, () => newsletterService.updateCampaign(req.params.id, req.body || {}));
+  }
+
+  deleteCampaign(req: Request, res: Response) {
+    return handle(res, () => newsletterService.deleteCampaign(req.params.id));
+  }
+
+  sendCampaignById(req: Request, res: Response) {
+    return handle(res, () => newsletterService.sendCampaignById(req.params.id));
   }
 }
 

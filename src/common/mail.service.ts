@@ -7,6 +7,7 @@ export type SendMailOptions = {
   text: string;
   html: string;
   replyTo?: string;
+  listUnsubscribeUrl?: string;
 };
 
 async function sendViaSmtp(opts: SendMailOptions) {
@@ -24,6 +25,12 @@ async function sendViaSmtp(opts: SendMailOptions) {
     },
   });
 
+  const headers: Record<string, string> = {};
+  if (opts.listUnsubscribeUrl) {
+    headers['List-Unsubscribe'] = `<${opts.listUnsubscribeUrl}>`;
+    headers['List-Unsubscribe-Post'] = 'List-Unsubscribe=One-Click';
+  }
+
   await transporter.sendMail({
     from: env.contactFrom || `"${env.mailFromName}" <${env.smtpUser}>`,
     to: opts.to,
@@ -31,6 +38,7 @@ async function sendViaSmtp(opts: SendMailOptions) {
     subject: opts.subject,
     text: opts.text,
     html: opts.html,
+    headers,
   });
 
   return true;
@@ -40,6 +48,12 @@ async function sendViaResend(opts: SendMailOptions) {
   if (!env.resendApiKey) return false;
 
   const from = env.contactFrom || 'Bany Official <onboarding@resend.dev>';
+  const headers: Record<string, string> = {};
+  if (opts.listUnsubscribeUrl) {
+    headers['List-Unsubscribe'] = `<${opts.listUnsubscribeUrl}>`;
+    headers['List-Unsubscribe-Post'] = 'List-Unsubscribe=One-Click';
+  }
+
   const response = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: {
@@ -53,6 +67,7 @@ async function sendViaResend(opts: SendMailOptions) {
       subject: opts.subject,
       text: opts.text,
       html: opts.html,
+      headers,
     }),
   });
 
@@ -76,7 +91,7 @@ export async function sendMail(opts: SendMailOptions): Promise<{ provider: 'smtp
 
   throw Object.assign(
     new Error(
-      'Email non configuré. Ajoutez EMAIL_HOST, EMAIL_USER, EMAIL_PASS (Gmail) dans le .env du backend.'
+      'Email non configuré. Ajoutez EMAIL_HOST, EMAIL_USER, EMAIL_PASS (Gmail) ou RESEND_API_KEY.'
     ),
     { status: 503 }
   );

@@ -40,6 +40,6 @@ export const env = {
   smtpPass,
   resendApiKey: firstEnv('RESEND_API_KEY'),
   get emailConfigured() {
-    return Boolean(this.smtpHost && this.smtpUser && this.smtpPass);
+    return Boolean((this.smtpHost && this.smtpUser && this.smtpPass) || this.resendApiKey);
   },
 };
