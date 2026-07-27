@@ -5,6 +5,9 @@ const subscriberSchema = new Schema(
     email: { type: String, required: true, unique: true, lowercase: true, trim: true },
     source: { type: String, default: 'blog' },
     subscribedAt: { type: Date, default: Date.now },
+    active: { type: Boolean, default: true, index: true },
+    unsubscribeToken: { type: String, unique: true, sparse: true, index: true },
+    lastNotifiedAt: { type: Date, default: null },
   },
   {
     timestamps: true,
@@ -14,6 +17,7 @@ const subscriberSchema = new Schema(
         ret.id = String(ret._id);
         delete ret._id;
         delete ret.__v;
+        delete ret.unsubscribeToken;
         return ret;
       },
     },

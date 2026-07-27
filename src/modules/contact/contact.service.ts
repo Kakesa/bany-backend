@@ -1,4 +1,4 @@
-import nodemailer from 'nodemailer';
+import { sendMail, escapeHtml } from '../../common/mail.service.js';
 import { env } from '../../config/env.js';
 
 type ContactPayload = {
@@ -71,85 +71,6 @@ function buildMessage(payload: ContactPayload): { subject: string; text: string;
   return { subject, text, html };
 }
 
-function escapeHtml(value: string) {
-  return String(value)
-    .replace(/&/g, '&amp;')
-    .replace(/</g, '&lt;')
-    .replace(/>/g, '&gt;')
-    .replace(/"/g, '&quot;');
-}
-
-async function sendViaSmtp(opts: {
-  to: string;
-  replyTo: string;
-  subject: string;
-  text: string;
-  html: string;
-}) {
-  if (!env.smtpHost || !env.smtpUser || !env.smtpPass) {
-    return false;
-  }
-
-  const transporter = nodemailer.createTransport({
-    host: env.smtpHost,
-    port: env.smtpPort,
-    secure: env.smtpSecure,
-    auth: {
-      user: env.smtpUser,
-      pass: env.smtpPass,
-    },
-  });
-
-  await transporter.sendMail({
-    // Gmail exige en général l'adresse EMAIL_USER comme From
-    from: env.contactFrom || `"${env.mailFromName}" <${env.smtpUser}>`,
-    to: opts.to,
-    replyTo: opts.replyTo,
-    subject: opts.subject,
-    text: opts.text,
-    html: opts.html,
-  });
-
-  return true;
-}
-
-async function sendViaResend(opts: {
-  to: string;
-  replyTo: string;
-  subject: string;
-  text: string;
-  html: string;
-}) {
-  if (!env.resendApiKey) return false;
-
-  const from = env.contactFrom || 'Bany Official <onboarding@resend.dev>';
-  const response = await fetch('https://api.resend.com/emails', {
-    method: 'POST',
-    headers: {
-      Authorization: `Bearer ${env.resendApiKey}`,
-      'Content-Type': 'application/json',
-    },
-    body: JSON.stringify({
-      from,
-      to: [opts.to],
-      reply_to: opts.replyTo,
-      subject: opts.subject,
-      text: opts.text,
-      html: opts.html,
-    }),
-  });
-
-  const data = (await response.json().catch(() => ({}))) as { message?: string; name?: string };
-  if (!response.ok) {
-    throw Object.assign(
-      new Error(data.message || data.name || `Resend error (${response.status})`),
-      { status: 502 }
-    );
-  }
-
-  return true;
-}
-
 export const contactService = {
   async send(payload: ContactPayload) {
     const name = String(payload.name || '').trim();
@@ -168,35 +89,20 @@ export const contactService = {
 
     const built = buildMessage({ ...payload, type, name, email });
     const to = env.contactEmail;
-    const mailOpts = {
+
+    const result = await sendMail({
       to,
       replyTo: email,
       subject: built.subject,
       text: built.text,
       html: built.html,
+    });
+
+    return {
+      success: true,
+      to,
+      provider: result.provider,
+      message: 'Message envoyé',
     };
-
-    try {
-      const sentSmtp = await sendViaSmtp(mailOpts);
-      if (sentSmtp) {
-        return { success: true, to, provider: 'smtp', message: 'Message envoyé' };
-      }
-
-      const sentResend = await sendViaResend(mailOpts);
-      if (sentResend) {
-        return { success: true, to, provider: 'resend', message: 'Message envoyé' };
-      }
-    } catch (err: unknown) {
-      const message = err instanceof Error ? err.message : String(err);
-      console.error('[contact] email send failed:', message);
-      throw Object.assign(new Error(`Échec d’envoi email : ${message}`), { status: 502 });
-    }
-
-    throw Object.assign(
-      new Error(
-        'Email non configuré. Ajoutez EMAIL_HOST, EMAIL_USER, EMAIL_PASS (Gmail) dans le .env du backend.'
-      ),
-      { status: 503 }
-    );
   },
 };

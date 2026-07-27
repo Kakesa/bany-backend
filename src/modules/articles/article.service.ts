@@ -2,6 +2,7 @@ import mongoose from 'mongoose';
 import { Article, type ArticleStatus } from './article.model.js';
 import { Category } from '../categories/category.model.js';
 import { Comment } from '../comments/comment.model.js';
+import { newsletterService } from '../newsletter/newsletter.service.js';
 import { estimateReadingTime, extractYoutubeEmbed, slugify } from '../../common/utils.js';
 
 export interface ArticleQuery {
@@ -30,12 +31,29 @@ export interface ArticleInput {
   scheduledAt?: string | null;
   featured?: boolean;
   publishNow?: boolean;
+  /** Notifier les abonnés newsletter (défaut: true à la 1re publication) */
+  notifySubscribers?: boolean;
   seo?: {
     metaTitle?: string;
     metaDescription?: string;
     ogImage?: string;
     canonicalUrl?: string;
   };
+}
+
+function queueArticleNotify(
+  article: { title?: string; slug?: string; excerpt?: string },
+  notify = true
+) {
+  if (!notify || !article.title || !article.slug) return;
+  void newsletterService
+    .notifyNewArticle({
+      title: String(article.title),
+      slug: String(article.slug),
+      excerpt: article.excerpt ? String(article.excerpt) : '',
+    })
+    .then((result) => console.log('[newsletter] article notify', result))
+    .catch((err) => console.error('[newsletter] article notify error', err));
 }
 
 function mapCategory(category: unknown) {
@@ -101,10 +119,17 @@ async function serializeOne(article: Record<string, unknown>) {
 export class ArticleService {
   async publishDueScheduled() {
     const now = new Date();
+    const due = await Article.find({ status: 'scheduled', scheduledAt: { $lte: now } });
+    if (!due.length) return;
+
     await Article.updateMany(
-      { status: 'scheduled', scheduledAt: { $lte: now } },
+      { _id: { $in: due.map((a) => a._id) } },
       { $set: { status: 'published', publishedAt: now } }
     );
+
+    for (const article of due) {
+      queueArticleNotify(article);
+    }
   }
 
   async listPublic(query: ArticleQuery) {
@@ -289,6 +314,9 @@ export class ArticleService {
     });
 
     const populated = await Article.findById(article._id).populate('category').lean();
+    if (status === 'published') {
+      queueArticleNotify(article, input.notifySubscribers !== false);
+    }
     return serializeOne(populated as Record<string, unknown>);
   }
 
@@ -298,6 +326,7 @@ export class ArticleService {
       throw Object.assign(new Error('Article introuvable'), { status: 404 });
     }
 
+    const wasPublished = article.status === 'published';
     const now = new Date();
     if (input.title !== undefined) article.title = input.title;
     if (input.excerpt !== undefined) article.excerpt = input.excerpt;
@@ -358,6 +387,10 @@ export class ArticleService {
 
     await article.save();
     const populated = await Article.findById(article._id).populate('category').lean();
+    const justPublished = status === 'published' && !wasPublished;
+    if (justPublished) {
+      queueArticleNotify(article, input.notifySubscribers !== false);
+    }
     return serializeOne(populated as Record<string, unknown>);
   }
 

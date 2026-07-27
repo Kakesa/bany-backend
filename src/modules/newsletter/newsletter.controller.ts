@@ -23,9 +23,58 @@ export class NewsletterController {
     }
   }
 
+  async unsubscribe(req: Request, res: Response) {
+    try {
+      const token = (req.query.token as string) || req.body?.token;
+      const result = await newsletterService.unsubscribeByToken(token);
+      res.json(result);
+    } catch (err) {
+      res.status(getErrorStatus(err)).json({
+        message: err instanceof Error ? err.message : 'Erreur',
+      });
+    }
+  }
+
   async list(req: Request, res: Response) {
     const data = await newsletterService.listSubscribers();
     res.json(data);
+  }
+
+  async setActive(req: Request, res: Response) {
+    try {
+      const active = Boolean(req.body?.active);
+      const data = await newsletterService.setActive(req.params.id, active);
+      res.json(data);
+    } catch (err) {
+      res.status(getErrorStatus(err)).json({
+        message: err instanceof Error ? err.message : 'Erreur',
+      });
+    }
+  }
+
+  async remove(req: Request, res: Response) {
+    try {
+      const data = await newsletterService.deleteSubscriber(req.params.id);
+      res.json(data);
+    } catch (err) {
+      res.status(getErrorStatus(err)).json({
+        message: err instanceof Error ? err.message : 'Erreur',
+      });
+    }
+  }
+
+  async sendCampaign(req: Request, res: Response) {
+    try {
+      const data = await newsletterService.sendCampaign({
+        subject: req.body?.subject,
+        message: req.body?.message,
+      });
+      res.json(data);
+    } catch (err) {
+      res.status(getErrorStatus(err)).json({
+        message: err instanceof Error ? err.message : 'Erreur',
+      });
+    }
   }
 }
 
