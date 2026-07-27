@@ -10,6 +10,13 @@ async function bootstrap() {
   const app = createApp();
   app.listen(env.port, '0.0.0.0', () => {
     console.log(`Bany backend running on http://localhost:${env.port}`);
+    if (env.emailConfigured) {
+      console.log(`Email SMTP ready → ${env.contactEmail} (via ${env.smtpUser})`);
+    } else {
+      console.warn(
+        'Email SMTP non configuré — ajoute EMAIL_HOST, EMAIL_USER, EMAIL_PASS dans bany-backend/.env'
+      );
+    }
   });
 }
 

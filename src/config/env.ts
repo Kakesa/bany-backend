@@ -1,4 +1,9 @@
-import 'dotenv/config';
+import dotenv from 'dotenv';
+import path from 'path';
+import { fileURLToPath } from 'url';
+
+const __dirname = path.dirname(fileURLToPath(import.meta.url));
+dotenv.config({ path: path.resolve(__dirname, '../../.env') });
 
 function firstEnv(...keys: string[]) {
   for (const key of keys) {
@@ -26,7 +31,7 @@ export const env = {
   /** Boîte qui reçoit Inviter Bany + Contact */
   contactEmail: firstEnv('CONTACT_EMAIL') || 'contact@banyofficial.com',
   mailFromName,
-  /** En-tête From (avec Gmail: laisser vide pour utiliser EMAIL_USER) */
+  /** En-tête From (avec Gmail: utiliser EMAIL_USER) */
   contactFrom,
   smtpHost,
   smtpPort: Number(firstEnv('EMAIL_PORT', 'SMTP_PORT') || 587),
@@ -34,4 +39,7 @@ export const env = {
   smtpUser,
   smtpPass,
   resendApiKey: firstEnv('RESEND_API_KEY'),
+  get emailConfigured() {
+    return Boolean(this.smtpHost && this.smtpUser && this.smtpPass);
+  },
 };
