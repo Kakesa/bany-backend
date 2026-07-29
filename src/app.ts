@@ -14,6 +14,7 @@ import newsletterRoutes from './modules/newsletter/newsletter.routes.js';
 import uploadRoutes from './modules/upload/upload.routes.js';
 import commentRoutes from './modules/comments/comment.routes.js';
 import contactRoutes from './modules/contact/contact.routes.js';
+import siteContentRoutes from './modules/site-content/site-content.routes.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -51,6 +52,7 @@ export function createApp() {
   app.use('/api/upload', uploadRoutes);
   app.use('/api/comments', commentRoutes);
   app.use('/api/contact', contactRoutes);
+  app.use('/api/site-content', siteContentRoutes);
 
   // Compatibility alias for existing frontend mailchimp service
   app.post('/api/mailchimp/subscribe', async (req, res, next) => {

@@ -20,6 +20,10 @@ const articleSchema = new Schema(
     gallery: { type: [String], default: [] },
     youtubeUrl: { type: String },
     author: { type: String, default: 'Bany' },
+    authorTitle: {
+      type: String,
+      default: 'Founder & CEO – Yolo Group | Honorary Doctor (Entrepreneurship & Host of Bany Talks)',
+    },
     category: { type: Schema.Types.ObjectId, ref: 'Category', required: true },
     tags: { type: [String], default: [] },
     status: {

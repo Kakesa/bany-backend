@@ -5,6 +5,10 @@ import { Comment } from '../comments/comment.model.js';
 import { newsletterService } from '../newsletter/newsletter.service.js';
 import { estimateReadingTime, extractYoutubeEmbed, slugify } from '../../common/utils.js';
 
+export const DEFAULT_AUTHOR = 'Bany';
+export const DEFAULT_AUTHOR_TITLE =
+  'Founder & CEO – Yolo Group | Honorary Doctor (Entrepreneurship & Host of Bany Talks)';
+
 export interface ArticleQuery {
   q?: string;
   category?: string;
@@ -24,6 +28,7 @@ export interface ArticleInput {
   gallery?: string[];
   youtubeUrl?: string;
   author?: string;
+  authorTitle?: string;
   categoryId?: string;
   tags?: string[];
   status?: ArticleStatus;
@@ -79,7 +84,8 @@ function serialize(article: Record<string, unknown>, commentCount = 0) {
     coverImage: article.coverImage,
     gallery: article.gallery || [],
     youtubeUrl: article.youtubeUrl,
-    author: article.author,
+    author: article.author || DEFAULT_AUTHOR,
+    authorTitle: (article.authorTitle as string) || DEFAULT_AUTHOR_TITLE,
     categoryId: category?.id || String(article.category),
     category,
     tags: article.tags || [],
@@ -297,7 +303,8 @@ export class ArticleService {
       coverImage: input.coverImage || '',
       gallery: input.gallery || [],
       youtubeUrl: extractYoutubeEmbed(input.youtubeUrl),
-      author: input.author || 'Bany',
+      author: input.author || DEFAULT_AUTHOR,
+      authorTitle: input.authorTitle || DEFAULT_AUTHOR_TITLE,
       category: categoryId,
       tags: input.tags || [],
       status,
@@ -338,6 +345,7 @@ export class ArticleService {
     if (input.gallery !== undefined) article.gallery = input.gallery;
     if (input.youtubeUrl !== undefined) article.youtubeUrl = extractYoutubeEmbed(input.youtubeUrl);
     if (input.author !== undefined) article.author = input.author;
+    if (input.authorTitle !== undefined) article.authorTitle = input.authorTitle;
     if (input.categoryId !== undefined) article.category = new mongoose.Types.ObjectId(input.categoryId);
     if (input.tags !== undefined) article.tags = input.tags;
     if (input.featured !== undefined) article.featured = input.featured;
