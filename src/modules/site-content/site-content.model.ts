@@ -8,11 +8,25 @@ const statisticSchema = new Schema(
   { _id: false }
 );
 
+const timelineMilestoneSchema = new Schema(
+  {
+    year: { type: String, required: true, trim: true },
+    month: { type: Number, min: 1, max: 12, default: null },
+    title: { type: String, required: true, trim: true },
+    desc: { type: String, required: true, trim: true },
+  },
+  { _id: false }
+);
+
 const siteContentSchema = new Schema(
   {
     key: { type: String, required: true, unique: true, default: 'main' },
     statistics: {
       type: [statisticSchema],
+      default: [],
+    },
+    timeline: {
+      type: [timelineMilestoneSchema],
       default: [],
     },
   },

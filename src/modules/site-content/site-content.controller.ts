@@ -16,7 +16,10 @@ export class SiteContentController {
 
   async update(req: Request, res: Response) {
     try {
-      const data = await siteContentService.updateStatistics(req.body?.statistics);
+      const data = await siteContentService.update({
+        statistics: req.body?.statistics,
+        timeline: req.body?.timeline,
+      });
       res.json(data);
     } catch (err) {
       res.status(getErrorStatus(err)).json({
