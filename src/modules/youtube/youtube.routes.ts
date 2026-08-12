@@ -41,9 +41,16 @@ router.get('/channel', async (req, res) => {
   if (!channelId || typeof channelId !== 'string') {
     return res.status(400).send('Missing channel_id');
   }
+
+  const cleanId = channelId.trim().replace(/^["']|["']$/g, '');
+  // UC… → UU… (playlist Uploads) — plus fiable que channel_id en prod
+  const uploadsPlaylistId = cleanId.startsWith('UC')
+    ? `UU${cleanId.slice(2)}`
+    : cleanId;
+
   await proxyYoutubeRss(
     res,
-    `https://www.youtube.com/feeds/videos.xml?channel_id=${encodeURIComponent(channelId)}`,
+    `https://www.youtube.com/feeds/videos.xml?playlist_id=${encodeURIComponent(uploadsPlaylistId)}`,
     'YouTube channel RSS'
   );
 });
