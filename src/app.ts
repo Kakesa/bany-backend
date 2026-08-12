@@ -15,6 +15,7 @@ import uploadRoutes from './modules/upload/upload.routes.js';
 import commentRoutes from './modules/comments/comment.routes.js';
 import contactRoutes from './modules/contact/contact.routes.js';
 import siteContentRoutes from './modules/site-content/site-content.routes.js';
+import youtubeRoutes from './modules/youtube/youtube.routes.js';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 
@@ -53,6 +54,8 @@ export function createApp() {
   app.use('/api/comments', commentRoutes);
   app.use('/api/contact', contactRoutes);
   app.use('/api/site-content', siteContentRoutes);
+  // Used by frontend in prod (nginx proxies all /api to this backend)
+  app.use('/api/youtube', youtubeRoutes);
 
   // Compatibility alias for existing frontend mailchimp service
   app.post('/api/mailchimp/subscribe', async (req, res, next) => {
