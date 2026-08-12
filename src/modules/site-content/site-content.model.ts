@@ -12,6 +12,8 @@ const timelineMilestoneSchema = new Schema(
   {
     year: { type: String, required: true, trim: true },
     month: { type: Number, min: 1, max: 12, default: null },
+    endYear: { type: String, default: null, trim: true },
+    endMonth: { type: Number, min: 1, max: 12, default: null },
     title: { type: String, required: true, trim: true },
     desc: { type: String, required: true, trim: true },
   },

@@ -8,6 +8,8 @@ export type SiteStatistic = {
 export type TimelineMilestone = {
   year: string;
   month: number | null;
+  endYear: string | null;
+  endMonth: number | null;
   title: string;
   desc: string;
 };
@@ -21,34 +23,44 @@ export const DEFAULT_STATISTICS: SiteStatistic[] = [
 
 export const DEFAULT_TIMELINE: TimelineMilestone[] = [
   {
-    year: '2021',
+    year: '2025',
     month: null,
-    title: 'Le Premier Micro',
-    desc: 'Bany lance les émissions de sa propre chambre avec des invités locaux branchés.',
-  },
-  {
-    year: '2022',
-    month: null,
-    title: 'Audience Explosive',
-    desc: 'Le cap des 100K téléchargements cumulés est franchi grâce à des interviews franches de créateurs.',
-  },
-  {
-    year: '2023',
-    month: null,
-    title: 'Studio Bany Talks',
-    desc: 'Inauguration du studio professionnel à Paris et passage aux diffusions de haute qualité sur YouTube.',
+    endYear: null,
+    endMonth: null,
+    title: 'Référence Européenne',
+    desc: 'Bany Talks élue l’une des émissions de podcasts francophones les plus décisives de la décennie.',
   },
   {
     year: '2024',
     month: null,
+    endYear: null,
+    endMonth: null,
     title: 'Invités de Prestige',
     desc: 'Entrée des PDG fondateurs du CAC40 et d’investisseurs légendaires de la tech dans l’émission.',
   },
   {
-    year: '2025',
+    year: '2023',
     month: null,
-    title: 'Référence Européenne',
-    desc: 'Bany Talks élue l’une des émissions de podcasts francophones les plus décisives de la décennie.',
+    endYear: null,
+    endMonth: null,
+    title: 'Studio Bany Talks',
+    desc: 'Inauguration du studio professionnel à Paris et passage aux diffusions de haute qualité sur YouTube.',
+  },
+  {
+    year: '2022',
+    month: null,
+    endYear: null,
+    endMonth: null,
+    title: 'Audience Explosive',
+    desc: 'Le cap des 100K téléchargements cumulés est franchi grâce à des interviews franches de créateurs.',
+  },
+  {
+    year: '2021',
+    month: null,
+    endYear: null,
+    endMonth: null,
+    title: 'Le Premier Micro',
+    desc: 'Bany lance les émissions de sa propre chambre avec des invités locaux branchés.',
   },
 ];
 
@@ -89,10 +101,10 @@ function sortTimeline(items: TimelineMilestone[]): TimelineMilestone[] {
   return [...items].sort((a, b) => {
     const yearA = Number.parseInt(a.year, 10) || 0;
     const yearB = Number.parseInt(b.year, 10) || 0;
-    if (yearA !== yearB) return yearA - yearB;
+    if (yearA !== yearB) return yearB - yearA;
     const monthA = a.month ?? 0;
     const monthB = b.month ?? 0;
-    return monthA - monthB;
+    return monthB - monthA;
   });
 }
 
@@ -108,8 +120,11 @@ function normalizeTimeline(input: unknown): TimelineMilestone[] {
       const title = String((item as { title?: unknown }).title ?? '').trim();
       const desc = String((item as { desc?: unknown }).desc ?? '').trim();
       const month = parseMonth((item as { month?: unknown }).month);
+      const endYearRaw = String((item as { endYear?: unknown }).endYear ?? '').trim();
+      const endYear = endYearRaw || null;
+      const endMonth = parseMonth((item as { endMonth?: unknown }).endMonth);
       if (!year || !title || !desc) return null;
-      return { year, month, title, desc };
+      return { year, month, endYear, endMonth, title, desc };
     })
     .filter((item): item is TimelineMilestone => Boolean(item));
 
