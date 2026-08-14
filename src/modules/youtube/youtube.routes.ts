@@ -1,4 +1,5 @@
 import { Router } from 'express';
+import { fetchYoutubePlaylistItems } from './youtube.service.js';
 
 const router = Router();
 
@@ -23,6 +24,21 @@ async function proxyYoutubeRss(
     res.status(502).send(`Failed to fetch ${errorLabel}`);
   }
 }
+
+router.get('/playlist-items', async (req, res) => {
+  const playlistId = req.query.playlist_id;
+  if (!playlistId || typeof playlistId !== 'string') {
+    return res.status(400).json({ message: 'Missing playlist_id' });
+  }
+  try {
+    const items = await fetchYoutubePlaylistItems(playlistId);
+    res.set('Cache-Control', 'no-store, no-cache, must-revalidate');
+    res.json(items);
+  } catch (error) {
+    console.error('YouTube playlist-items error:', error);
+    res.status(502).json({ message: 'Failed to fetch playlist items' });
+  }
+});
 
 router.get('/playlist', async (req, res) => {
   const playlistId = req.query.playlist_id;
