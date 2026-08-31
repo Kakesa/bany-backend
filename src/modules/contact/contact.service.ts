@@ -11,27 +11,35 @@ type ContactPayload = {
   eventType?: string;
   date?: string;
   formule?: string;
+  city?: string;
+  eventFormat?: string;
+  audience?: string;
+  theme?: string;
 };
 
 function buildMessage(payload: ContactPayload): { subject: string; text: string; html: string } {
   if (payload.type === 'invite') {
-    const subject = `Invitation Bany — ${payload.formule || 'Formule'} — ${payload.name}`;
+    const subject = `Travailler avec Bany — ${payload.eventType || 'Demande'} — ${payload.name}`;
     const rows: [string, string][] = [
       ['Nom', payload.name],
       ['Email', payload.email],
-      ['Entreprise', payload.company || '—'],
+      ['Organisation', payload.company || '—'],
       ['Type', payload.eventType || '—'],
-      ['Date', payload.date || '—'],
-      ['Formule', payload.formule || '—'],
-      ['Brief', payload.message || 'Aucun message'],
+      ['Date / échéance', payload.date || '—'],
+      ['Format', payload.formule || '—'],
     ];
+    if (payload.city) rows.push(['Ville / pays', payload.city]);
+    if (payload.eventFormat) rows.push(['Type d’événement', payload.eventFormat]);
+    if (payload.audience) rows.push(['Audience', payload.audience]);
+    if (payload.theme) rows.push(['Thématique', payload.theme]);
+    rows.push(['Brief', payload.message || 'Aucun message']);
     const text = [
-      'Nouvelle demande d’invitation Bany',
+      'Nouvelle demande — Travailler avec Bany',
       '',
       ...rows.map(([k, v]) => `${k} : ${v}`),
     ].join('\n');
     const html = `
-      <h2>Nouvelle demande d’invitation Bany</h2>
+      <h2>Nouvelle demande — Travailler avec Bany</h2>
       <table style="border-collapse:collapse;font-family:sans-serif;font-size:14px">
         ${rows
           .map(
