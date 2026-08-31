@@ -26,17 +26,36 @@ if (!fs.existsSync(uploadsDir)) {
 export function createApp() {
   const app = express();
 
+  const allowedOrigins = new Set(
+    [
+      env.frontendUrl,
+      env.adminUrl,
+      'https://banyofficial.com',
+      'https://www.banyofficial.com',
+      'https://admin.banyofficial.com',
+      'http://localhost:3000',
+      'http://127.0.0.1:3000',
+      'http://localhost:3001',
+      'http://127.0.0.1:3001',
+    ]
+      .filter(Boolean)
+      .map((url) => url.replace(/\/$/, ''))
+  );
+
   app.use(
     cors({
-      origin: [
-        env.frontendUrl,
-        env.adminUrl,
-        'http://localhost:3000',
-        'http://127.0.0.1:3000',
-        'http://localhost:3001',
-        'http://127.0.0.1:3001',
-      ],
+      origin(origin, callback) {
+        // Same-origin / server-to-server / curl: no Origin header
+        if (!origin || allowedOrigins.has(origin.replace(/\/$/, ''))) {
+          callback(null, true);
+          return;
+        }
+        callback(null, false);
+      },
       credentials: true,
+      methods: ['GET', 'HEAD', 'PUT', 'PATCH', 'POST', 'DELETE', 'OPTIONS'],
+      allowedHeaders: ['Content-Type', 'Authorization'],
+      optionsSuccessStatus: 204,
     })
   );
   app.use(express.json({ limit: '2mb' }));
