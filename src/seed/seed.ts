@@ -34,8 +34,18 @@ export async function seedDatabase(force = false) {
     await Category.deleteMany({});
   }
 
-  const categories = await Category.insertMany(CATEGORIES);
-  const bySlug = Object.fromEntries(categories.map((c) => [c.slug, c]));
+  await Category.bulkWrite(
+    CATEGORIES.map((category) => ({
+      updateOne: {
+        filter: { slug: category.slug },
+        update: { $set: category },
+        upsert: true,
+      },
+    }))
+  );
+
+  const categories = await Category.find();
+  const bySlug = Object.fromEntries(categories.map((category) => [category.slug, category]));
 
   const articles = [
     {
@@ -229,6 +239,14 @@ export async function seedDatabase(force = false) {
     scheduledAt: null,
   }));
 
-  await Article.insertMany(articles);
+  await Article.bulkWrite(
+    articles.map((article) => ({
+      updateOne: {
+        filter: { slug: article.slug },
+        update: { $set: article },
+        upsert: true,
+      },
+    }))
+  );
   console.log(`Seeded ${categories.length} categories and ${articles.length} articles.`);
 }
