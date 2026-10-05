@@ -20,6 +20,15 @@ const timelineMilestoneSchema = new Schema(
   { _id: false }
 );
 
+const engagementSchema = new Schema(
+  {
+    showLikes: { type: Boolean, default: true },
+    showComments: { type: Boolean, default: true },
+    showShare: { type: Boolean, default: true },
+  },
+  { _id: false }
+);
+
 const siteContentSchema = new Schema(
   {
     key: { type: String, required: true, unique: true, default: 'main' },
@@ -30,6 +39,10 @@ const siteContentSchema = new Schema(
     timeline: {
       type: [timelineMilestoneSchema],
       default: [],
+    },
+    engagement: {
+      type: engagementSchema,
+      default: () => ({ showLikes: true, showComments: true, showShare: true }),
     },
   },
   {

@@ -19,6 +19,7 @@ export class SiteContentController {
       const data = await siteContentService.update({
         statistics: req.body?.statistics,
         timeline: req.body?.timeline,
+        engagement: req.body?.engagement,
       });
       res.json(data);
     } catch (err) {

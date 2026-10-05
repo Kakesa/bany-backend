@@ -21,6 +21,31 @@ export const DEFAULT_STATISTICS: SiteStatistic[] = [
   { label: 'Note Moyenne (Spotify)', value: '4.9/5' },
 ];
 
+export type EngagementSettings = {
+  showLikes: boolean;
+  showComments: boolean;
+  showShare: boolean;
+};
+
+export const DEFAULT_ENGAGEMENT: EngagementSettings = {
+  showLikes: true,
+  showComments: true,
+  showShare: true,
+};
+
+function readFlag(value: unknown, fallback: boolean): boolean {
+  return typeof value === 'boolean' ? value : fallback;
+}
+
+export function normalizeEngagement(input: unknown): EngagementSettings {
+  const src = input && typeof input === 'object' ? (input as Record<string, unknown>) : {};
+  return {
+    showLikes: readFlag(src.showLikes, DEFAULT_ENGAGEMENT.showLikes),
+    showComments: readFlag(src.showComments, DEFAULT_ENGAGEMENT.showComments),
+    showShare: readFlag(src.showShare, DEFAULT_ENGAGEMENT.showShare),
+  };
+}
+
 export const DEFAULT_TIMELINE: TimelineMilestone[] = [
   {
     year: '2025',
@@ -165,10 +190,10 @@ export class SiteContentService {
     const timeline = Array.isArray(json.timeline)
       ? sortTimeline(json.timeline as TimelineMilestone[])
       : DEFAULT_TIMELINE;
-    return { ...json, timeline };
+    return { ...json, timeline, engagement: normalizeEngagement(json.engagement) };
   }
 
-  async update(payload: { statistics?: unknown; timeline?: unknown }) {
+  async update(payload: { statistics?: unknown; timeline?: unknown; engagement?: unknown }) {
     const $set: Record<string, unknown> = {};
 
     if (payload.statistics !== undefined) {
@@ -176,6 +201,9 @@ export class SiteContentService {
     }
     if (payload.timeline !== undefined) {
       $set.timeline = normalizeTimeline(payload.timeline);
+    }
+    if (payload.engagement !== undefined) {
+      $set.engagement = normalizeEngagement(payload.engagement);
     }
 
     if (Object.keys($set).length === 0) {
@@ -192,7 +220,7 @@ export class SiteContentService {
     const timeline = Array.isArray(json.timeline)
       ? sortTimeline(json.timeline as TimelineMilestone[])
       : [];
-    return { ...json, timeline };
+    return { ...json, timeline, engagement: normalizeEngagement(json.engagement) };
   }
 
   /** @deprecated use update() */
