@@ -28,7 +28,7 @@ export const DEFAULT_TIMELINE: TimelineMilestone[] = [
     endYear: null,
     endMonth: null,
     title: 'Référence Européenne',
-    desc: 'Bany Talks élue l’une des émissions de podcasts francophones les plus décisives de la décennie.',
+    desc: 'Bany Talks Experience élue l’une des émissions de podcasts francophones les plus décisives de la décennie.',
   },
   {
     year: '2024',
@@ -43,7 +43,7 @@ export const DEFAULT_TIMELINE: TimelineMilestone[] = [
     month: null,
     endYear: null,
     endMonth: null,
-    title: 'Studio Bany Talks',
+    title: 'Studio Bany Talks Experience',
     desc: 'Inauguration du studio professionnel à Paris et passage aux diffusions de haute qualité sur YouTube.',
   },
   {

@@ -22,7 +22,7 @@ const articleSchema = new Schema(
     author: { type: String, default: 'Bany' },
     authorTitle: {
       type: String,
-      default: 'Founder & CEO – Yolo Group | Honorary Doctor (Entrepreneurship & Host of Bany Talks)',
+      default: 'Founder & CEO – Yolo Group | Honorary Doctor (Entrepreneurship & Host of Bany Talks Experience)',
     },
     category: { type: Schema.Types.ObjectId, ref: 'Category', required: true },
     tags: { type: [String], default: [] },

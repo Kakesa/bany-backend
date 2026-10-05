@@ -146,7 +146,7 @@ export class CategoryService {
       author: article.author,
       authorTitle:
         (article.authorTitle as string) ||
-        'Founder & CEO – Yolo Group | Honorary Doctor (Entrepreneurship & Host of Bany Talks)',
+        'Founder & CEO – Yolo Group | Honorary Doctor (Entrepreneurship & Host of Bany Talks Experience)',
       categoryId: category?._id ? String(category._id) : String(article.category),
       category: category?._id
         ? {

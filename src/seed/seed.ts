@@ -10,7 +10,7 @@ const CATEGORIES = [
   { name: 'Innovation', slug: 'innovation', description: 'Idées nouvelles et disruption.' },
   { name: 'Podcasts', slug: 'podcasts', description: 'Coulisses et synthèses des épisodes.' },
   { name: 'Interviews', slug: 'interviews', description: 'Conversations exclusives avec les décideurs.' },
-  { name: 'Actualités', slug: 'actualites', description: "L'actualité de Bany Talks et de l'écosystème." },
+  { name: 'Actualités', slug: 'actualites', description: "L'actualité de Bany Talks Experience et de l'écosystème." },
   { name: 'Événements', slug: 'evenements', description: 'Lives, studios et rencontres communautaires.' },
 ];
 
@@ -54,7 +54,7 @@ export async function seedDatabase(force = false) {
       excerpt:
         "Pourquoi l'influence réelle naît de la crédibilité, pas du statut — et comment la cultiver au quotidien.",
       content: `<p>Le leadership africain contemporain ne se joue plus uniquement dans les bureaux climatisés. Il se construit dans les conversations, les décisions difficiles et la capacité à rassembler autour d'une vision claire.</p>
-<p>Chez Bany Talks, nous rencontrons chaque semaine des fondateurs qui n'attendent pas un titre pour entraîner. Ils montrent la voie par l'exemple, la transparence et l'exécution.</p>
+<p>Chez Bany Talks Experience, nous rencontrons chaque semaine des fondateurs qui n'attendent pas un titre pour entraîner. Ils montrent la voie par l'exemple, la transparence et l'exécution.</p>
 <h2>Trois leviers concrets</h2>
 <ul>
 <li>Clarifier le « pourquoi » avant le « comment »</li>
@@ -74,7 +74,7 @@ export async function seedDatabase(force = false) {
       publishedAt: daysAgo(2),
       featured: true,
       seo: {
-        metaTitle: 'Diriger sans titre : le leadership qui inspire | Bany Talks',
+        metaTitle: 'Diriger sans titre : le leadership qui inspire | Bany Talks Experience',
         metaDescription: "Découvrez comment cultiver une influence réelle sans dépendre d'un statut officiel.",
         ogImage: 'https://images.unsplash.com/photo-1552664730-d307ca884978?w=1200&q=80',
       },
@@ -101,7 +101,7 @@ export async function seedDatabase(force = false) {
       publishedAt: daysAgo(5),
       featured: true,
       seo: {
-        metaTitle: 'Lever des fonds en Afrique | Bany Talks Blog',
+        metaTitle: 'Lever des fonds en Afrique | Bany Talks Experience Blog',
         metaDescription: 'Conseils concrets pour pitcher et convaincre les investisseurs sur le continent africain.',
       },
     },
@@ -113,14 +113,14 @@ export async function seedDatabase(force = false) {
 <p>Sur les marchés africains, la simplicité gagne souvent : pricing clair, canaux locaux, et une obsession pour le cash flow.</p>`,
       coverImage: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?w=1200&q=80',
       gallery: ['https://images.unsplash.com/photo-1551288049-bebda4e38f71?w=800&q=80'],
-      author: 'Équipe Bany Talks',
+      author: 'Équipe Bany Talks Experience',
       category: bySlug.business._id,
       tags: ['business', 'stratégie', 'monétisation'],
       status: 'published' as const,
       publishedAt: daysAgo(8),
       featured: false,
       seo: {
-        metaTitle: 'Business model durable | Blog Bany Talks',
+        metaTitle: 'Business model durable | Blog Bany Talks Experience',
         metaDescription: 'Comment structurer un modèle économique rentable et adapté aux marchés africains.',
       },
     },
@@ -128,7 +128,7 @@ export async function seedDatabase(force = false) {
       title: 'IA et médias : ce que les créateurs africains doivent anticiper',
       slug: 'ia-medias-createurs-africains',
       excerpt: 'Outils, opportunités et risques éthiques pour les podcasts et plateformes du continent.',
-      content: `<p>L'intelligence artificielle accélère la production de contenu — mais elle ne remplace pas la voix authentique. Sur Bany Talks, la technologie sert le récit, jamais l'inverse.</p>
+      content: `<p>L'intelligence artificielle accélère la production de contenu — mais elle ne remplace pas la voix authentique. Sur Bany Talks Experience, la technologie sert le récit, jamais l'inverse.</p>
 <p>Transcription, clipping, traduction : autant de leviers pour amplifier une conversation sans diluer son âme.</p>`,
       coverImage: 'https://images.unsplash.com/photo-1677442136019-21780ecad995?w=1200&q=80',
       gallery: [],
@@ -139,7 +139,7 @@ export async function seedDatabase(force = false) {
       publishedAt: daysAgo(12),
       featured: false,
       seo: {
-        metaTitle: 'IA et médias africains | Bany Talks',
+        metaTitle: 'IA et médias africains | Bany Talks Experience',
         metaDescription: "Comment les créateurs africains peuvent utiliser l'IA sans perdre leur authenticité.",
       },
     },
@@ -150,7 +150,7 @@ export async function seedDatabase(force = false) {
       content: `<p>L'innovation frugale n'est pas une mode. C'est une discipline : résoudre un problème réel avec les ressources disponibles, sans attendre le budget idéal.</p>`,
       coverImage: 'https://images.unsplash.com/photo-1485827404703-89b55fcc595e?w=1200&q=80',
       gallery: [],
-      author: 'Équipe Bany Talks',
+      author: 'Équipe Bany Talks Experience',
       category: bySlug.innovation._id,
       tags: ['innovation', 'frugalité', 'impact'],
       status: 'published' as const,
@@ -162,7 +162,7 @@ export async function seedDatabase(force = false) {
       },
     },
     {
-      title: "Coulisses d'un enregistrement Bany Talks à Kinshasa",
+      title: "Coulisses d'un enregistrement Bany Talks Experience à Kinshasa",
       slug: 'coulisses-enregistrement-kinshasa',
       excerpt: "Une journée type au studio : préparation, énergie live et moments captés hors caméra.",
       content: `<p>Derrière chaque épisode, il y a une équipe, une lumière, et souvent un café trop fort. Voici ce que l'on ne voit pas à l'écran.</p>`,
@@ -175,7 +175,7 @@ export async function seedDatabase(force = false) {
       publishedAt: daysAgo(18),
       featured: true,
       seo: {
-        metaTitle: 'Coulisses studio Bany Talks Kinshasa',
+        metaTitle: 'Coulisses studio Bany Talks Experience Kinshasa',
         metaDescription: "Plongez dans les coulisses d'un enregistrement d'émission à Kinshasa.",
       },
     },
@@ -193,26 +193,26 @@ export async function seedDatabase(force = false) {
       publishedAt: daysAgo(22),
       featured: false,
       seo: {
-        metaTitle: 'Marque personnelle crédible | Interview Bany Talks',
+        metaTitle: 'Marque personnelle crédible | Interview Bany Talks Experience',
         metaDescription: 'Comment construire une marque personnelle solide et durable.',
       },
     },
     {
-      title: 'Bany Talks ouvre un nouveau format live mensuel',
+      title: 'Bany Talks Experience ouvre un nouveau format live mensuel',
       slug: 'nouveau-format-live-mensuel',
       excerpt: 'Annonce : chaque mois, une conversation live avec un invité surprise et vos questions en direct.',
       content: `<p>Nous lançons un rendez-vous live mensuel pour rapprocher encore plus la communauté et le plateau.</p>`,
       coverImage: 'https://images.unsplash.com/photo-1540575467063-178a50c2df87?w=1200&q=80',
       gallery: [],
-      author: 'Équipe Bany Talks',
+      author: 'Équipe Bany Talks Experience',
       category: bySlug.actualites._id,
       tags: ['actualité', 'live', 'communauté'],
       status: 'published' as const,
       publishedAt: daysAgo(1),
       featured: false,
       seo: {
-        metaTitle: 'Nouveau format live mensuel | Bany Talks',
-        metaDescription: 'Découvrez le nouveau rendez-vous live mensuel de Bany Talks.',
+        metaTitle: 'Nouveau format live mensuel | Bany Talks Experience',
+        metaDescription: 'Découvrez le nouveau rendez-vous live mensuel de Bany Talks Experience.',
       },
     },
     {
@@ -222,15 +222,15 @@ export async function seedDatabase(force = false) {
       content: `<p>Rejoignez-nous pour une soirée dédiée aux builders de Kinshasa. Speakers, networking et surprises.</p>`,
       coverImage: 'https://images.unsplash.com/photo-1492684223066-81342ee5ff30?w=1200&q=80',
       gallery: [],
-      author: 'Équipe Bany Talks',
+      author: 'Équipe Bany Talks Experience',
       category: bySlug.evenements._id,
       tags: ['événement', 'kinshasa', 'networking'],
       status: 'published' as const,
       publishedAt: daysAgo(3),
       featured: false,
       seo: {
-        metaTitle: 'Soirée builders Kinshasa | Événements Bany Talks',
-        metaDescription: 'Inscrivez-vous à la soirée builders organisée par Bany Talks à Kinshasa.',
+        metaTitle: 'Soirée builders Kinshasa | Événements Bany Talks Experience',
+        metaDescription: 'Inscrivez-vous à la soirée builders organisée par Bany Talks Experience à Kinshasa.',
       },
     },
   ].map((article) => ({

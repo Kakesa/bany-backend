@@ -7,7 +7,7 @@ import { estimateReadingTime, extractYoutubeEmbed, slugify } from '../../common/
 
 export const DEFAULT_AUTHOR = 'Bany';
 export const DEFAULT_AUTHOR_TITLE =
-  'Founder & CEO – Yolo Group | Honorary Doctor (Entrepreneurship & Host of Bany Talks)';
+  'Founder & CEO – Yolo Group | Honorary Doctor (Entrepreneurship & Host of Bany Talks Experience)';
 
 export interface ArticleQuery {
   q?: string;

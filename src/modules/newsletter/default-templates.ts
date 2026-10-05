@@ -5,7 +5,7 @@ const DEFAULT_TEMPLATES = [
     name: 'Bienvenue Bany',
     slug: 'welcome',
     category: 'welcome' as const,
-    subject: 'Bienvenue dans l’univers Bany Talks',
+    subject: 'Bienvenue dans l’univers Bany Talks Experience',
     previewText: 'Merci pour votre inscription à la newsletter.',
     isSystem: true,
     htmlBody: `
@@ -19,7 +19,7 @@ const DEFAULT_TEMPLATES = [
       </ul>
       <p style="margin:28px 0">
         <a href="{{siteUrl}}" style="display:inline-block;background:#ef3b3b;color:#fff;text-decoration:none;padding:12px 18px;font-weight:700">
-          Découvrir Bany Talks
+          Découvrir Bany Talks Experience
         </a>
       </p>
       <p>À très vite,<br/>L’équipe Bany Official</p>
@@ -31,7 +31,7 @@ const DEFAULT_TEMPLATES = [
     name: 'Nouvel article',
     slug: 'article-publish',
     category: 'article' as const,
-    subject: 'Nouveau sur Bany Talks — {{title}}',
+    subject: 'Nouveau sur Bany Talks Experience — {{title}}',
     previewText: '{{excerpt}}',
     isSystem: true,
     htmlBody: `
@@ -44,7 +44,7 @@ const DEFAULT_TEMPLATES = [
         </a>
       </p>
     `,
-    textBody: 'Nouveau sur Bany Talks : {{title}}\n\n{{excerpt}}\n\nLire : {{articleUrl}}',
+    textBody: 'Nouveau sur Bany Talks Experience : {{title}}\n\n{{excerpt}}\n\nLire : {{articleUrl}}',
   },
   {
     name: 'Annonce / Épisode',

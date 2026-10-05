@@ -56,7 +56,7 @@ export function wrapBanyLayout(opts: {
         </tr>
         <tr>
           <td style="padding:18px 28px 28px;border-top:1px solid rgba(255,255,255,0.06);color:#777;font-size:12px;line-height:1.5">
-            Vous recevez cet email car vous êtes abonné à la newsletter Bany Talks.<br/>
+            Vous recevez cet email car vous êtes abonné à la newsletter Bany Talks Experience.<br/>
             <a href="${opts.unsubscribeUrl}" style="color:#999;text-decoration:underline">Se désabonner</a>
             · Bany Official · Kinshasa
           </td>

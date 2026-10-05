@@ -299,7 +299,7 @@ export class NewsletterService {
         unsubscribeUrl: unsub,
       };
 
-      const subject = applyMergeTags(tpl?.subject || 'Nouveau sur Bany Talks — {{title}}', ctx);
+      const subject = applyMergeTags(tpl?.subject || 'Nouveau sur Bany Talks Experience — {{title}}', ctx);
       const inner = applyMergeTags(
         tpl?.htmlBody ||
           `<h2 style="color:#fff">{{title}}</h2><p>{{excerpt}}</p><p><a href="{{articleUrl}}">Lire</a></p>`,

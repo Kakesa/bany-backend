@@ -1,4 +1,5 @@
 import { createApp } from './app.js';
+import { migrateShowBrandNames } from './common/rename-show-brand.js';
 import { connectDatabase } from './config/db.js';
 import { env } from './config/env.js';
 import { seedDatabase } from './seed/seed.js';
@@ -8,6 +9,7 @@ async function bootstrap() {
   await connectDatabase();
   await seedDatabase(false);
   await newsletterService.ensureReady();
+  await migrateShowBrandNames();
 
   const app = createApp();
   app.listen(env.port, '0.0.0.0', () => {

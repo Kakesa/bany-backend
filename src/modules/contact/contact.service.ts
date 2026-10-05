@@ -52,7 +52,7 @@ function buildMessage(payload: ContactPayload): { subject: string; text: string;
     return { subject, text, html };
   }
 
-  const subjectLabel = payload.subject?.trim() || 'Contact Bany Talks';
+  const subjectLabel = payload.subject?.trim() || 'Contact Bany Talks Experience';
   const subject = `Contact — ${subjectLabel}`;
   const rows: [string, string][] = [
     ['Nom', payload.name],
